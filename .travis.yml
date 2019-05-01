@@ -6,11 +6,6 @@ rust:
   - nightly
 cache: cargo
 sudo: false
-addons:
-  apt:
-    packages:
-    - zathura
-    - zathura-dev
 env:
   global:
     - RUSTFLAGS="--deny warnings"
