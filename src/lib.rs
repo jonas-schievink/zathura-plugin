@@ -343,8 +343,10 @@ macro_rules! plugin_entry {
     };
 }
 
+#[cfg(feature = "testplugin")]
 struct TestPlugin;
 
+#[cfg(feature = "testplugin")]
 impl ZathuraPlugin for TestPlugin {
     type DocumentData = ();
     type PageData = ();
@@ -427,4 +429,5 @@ impl ZathuraPlugin for TestPlugin {
     }
 }
 
+#[cfg(feature = "testplugin")]
 plugin_entry!("TestPlugin", TestPlugin, ["text/plain"]);

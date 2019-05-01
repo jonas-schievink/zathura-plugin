@@ -49,3 +49,7 @@ cairo-rs = { version = "0.6.0", features = ["v1_14"] }
 version-sync = "0.8"
 
 [workspace]
+
+[features]
+# Includes a test plugin in the build cdylib that can be loaded into Zathura
+testplugin = []
