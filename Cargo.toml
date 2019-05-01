@@ -1,0 +1,51 @@
+[package]
+name = "zathura-plugin"
+version = "0.0.0"
+authors = ["Jonas Schievink <jonasschievink@gmail.com>"]
+edition = "2018"
+description = "Idiomatic wrapper around Zathura's Plugin interface"
+documentation = "https://docs.rs/zathura-plugin/"
+repository = "https://github.com/jonas-schievink/zathura-plugin.git"
+keywords = ["zathura", "pdf", "plugin"]
+categories = ["api-bindings"]
+readme = "README.md"
+license = "0BSD"
+
+[lib]
+crate-type = ["cdylib", "rlib"]
+
+[dependencies]
+zathura-plugin-sys = { path = "zathura-plugin-sys", version = "0.0.0" }
+cairo-sys-rs = "0.8.0"
+cairo-rs = { version = "0.6.0", features = ["v1_14"] }
+
+[dev-dependencies]
+version-sync = "0.8"
+
+
+# cargo-release configuration
+[package.metadata.release]
+tag-message = "{{version}}"
+no-dev-version = true
+pre-release-commit-message = "Release {{version}}"
+
+# Change the changelog's `Unreleased` section to refer to this release and
+# prepend new `Unreleased` section
+[[package.metadata.release.pre-release-replacements]]
+file    = "CHANGELOG.md"
+search  = "## Unreleased"
+replace = "## Unreleased\n\nNo changes.\n\n## {{version}} - {{date}}"
+
+# Bump the version inside the example manifest in `README.md`
+[[package.metadata.release.pre-release-replacements]]
+file    = "README.md"
+search  = 'zathura-plugin = "[a-z0-9\\.-]+"'
+replace = 'zathura-plugin = "{{version}}"'
+
+# Bump the version referenced by the `html_root_url` attribute in `lib.rs`
+[[package.metadata.release.pre-release-replacements]]
+file    = "src/lib.rs"
+search  = "https://docs.rs/zathura-plugin/[a-z0-9\\.-]+"
+replace = "https://docs.rs/zathura-plugin/{{version}}"
+
+[workspace]

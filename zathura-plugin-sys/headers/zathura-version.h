@@ -1,0 +1,13 @@
+/* SPDX-License-Identifier: Zlib */
+
+#ifndef ZATHURA_VERSION_H
+#define ZATHURA_VERSION_H
+
+#define ZATHURA_VERSION_MAJOR 0
+#define ZATHURA_VERSION_MINOR 4
+#define ZATHURA_VERSION_REV 3
+#define ZATHURA_VERSION "0.4.3"
+#define ZATHURA_API_VERSION 3
+#define ZATHURA_ABI_VERSION 4
+
+#endif

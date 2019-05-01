@@ -1,0 +1,18 @@
+[package]
+name = "zathura-plugin-sys"
+version = "0.0.0"
+authors = ["Jonas Schievink <jonasschievink@gmail.com>"]
+edition = "2018"
+description = "FFI bindings for Zathura's Plugin API"
+documentation = "https://docs.rs/zathura-plugin/"
+repository = "https://github.com/jonas-schievink/zathura-plugin.git"
+keywords = ["zathura", "pdf", "plugin"]
+categories = ["external-ffi-bindings"]
+readme = "README.md"
+license = "0BSD"
+links = "zathura"
+build = "build.rs"
+
+[build-dependencies]
+bindgen = "0.49.0"
+pkg-config = "0.3.14"
