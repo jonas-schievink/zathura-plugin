@@ -1,1 +1,1 @@
-#include "headers/plugin-api.h"
+#include <zathura/plugin-api.h>
