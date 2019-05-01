@@ -10,6 +10,3 @@ plugins in Rust.
 
 Please refer to the [changelog](CHANGELOG.md) to see what changed in the last
 releases.
-
-For documentation and examples, refer to the [documentation](https://docs.rs/zathura-plugin/)
-hosted on docs.rs.
