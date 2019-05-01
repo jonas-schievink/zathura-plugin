@@ -1,25 +1,15 @@
-# TODO: Write a title
+# A Zathura Plugin API wrapper for Rust
 
 [![crates.io](https://img.shields.io/crates/v/zathura-plugin.svg)](https://crates.io/crates/zathura-plugin)
 [![docs.rs](https://docs.rs/zathura-plugin/badge.svg)](https://docs.rs/zathura-plugin/)
 [![Build Status](https://travis-ci.org/jonas-schievink/zathura-plugin.svg?branch=master)](https://travis-ci.org/jonas-schievink/zathura-plugin)
 
-TODO: Briefly describe the crate here (eg. "This crate provides ...").
+This crate wraps [Zathura's](https://wiki.archlinux.org/index.php/Zathura)
+Plugin API in a memory- and typesafe Rust interface, and allows writing Zathura
+plugins in Rust.
 
 Please refer to the [changelog](CHANGELOG.md) to see what changed in the last
 releases.
 
-## Usage
-
-Start by adding an entry to your `Cargo.toml`:
-
-```toml
-[dependencies]
-zathura-plugin = "0.1.0"
-```
-
-Then import the crate into your Rust code:
-
-```rust
-extern crate zathura-plugin;
-```
+For documentation and examples, refer to the [documentation](https://docs.rs/zathura-plugin/)
+hosted on docs.rs.
