@@ -1,6 +1,6 @@
 [package]
 name = "zathura-plugin"
-version = "0.0.0"
+version = "0.1.0"
 authors = ["Jonas Schievink <jonasschievink@gmail.com>"]
 edition = "2018"
 description = "Idiomatic wrapper around Zathura's Plugin interface"
@@ -10,17 +10,6 @@ keywords = ["zathura", "pdf", "plugin"]
 categories = ["api-bindings"]
 readme = "README.md"
 license = "0BSD"
-
-[lib]
-crate-type = ["cdylib", "rlib"]
-
-[dependencies]
-zathura-plugin-sys = { path = "zathura-plugin-sys", version = "0.1.0" }
-cairo-sys-rs = "0.8.0"
-cairo-rs = { version = "0.6.0", features = ["v1_14"] }
-
-[dev-dependencies]
-version-sync = "0.8"
 
 
 # cargo-release configuration
@@ -47,5 +36,16 @@ replace = 'zathura-plugin = "{{version}}"'
 file    = "src/lib.rs"
 search  = "https://docs.rs/zathura-plugin/[a-z0-9\\.-]+"
 replace = "https://docs.rs/zathura-plugin/{{version}}"
+
+[lib]
+crate-type = ["cdylib", "rlib"]
+
+[dependencies]
+zathura-plugin-sys = { path = "zathura-plugin-sys", version = "0.1.0" }
+cairo-sys-rs = "0.8.0"
+cairo-rs = { version = "0.6.0", features = ["v1_14"] }
+
+[dev-dependencies]
+version-sync = "0.8"
 
 [workspace]
