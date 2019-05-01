@@ -1,10 +1,16 @@
+dist: xenial
 language: rust
 rust:
-  - 1.31.0
+  - 1.33.0
   - stable
   - nightly
 cache: cargo
 sudo: false
+addons:
+  apt:
+    packages:
+    - zathura
+    - zathura-dev
 env:
   global:
     - RUSTFLAGS="--deny warnings"
