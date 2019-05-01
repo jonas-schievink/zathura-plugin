@@ -1,6 +1,6 @@
 [package]
 name = "zathura-plugin-sys"
-version = "0.0.0"
+version = "0.1.0"
 authors = ["Jonas Schievink <jonasschievink@gmail.com>"]
 edition = "2018"
 description = "FFI bindings for Zathura's Plugin API"
