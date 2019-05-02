@@ -37,7 +37,7 @@
 //!
 //! [`ZathuraPlugin`]: trait.ZathuraPlugin.html
 
-#![doc(html_root_url = "https://docs.rs/zathura-plugin/0.1.0")]
+#![doc(html_root_url = "https://docs.rs/zathura-plugin/0.2.0")]
 #![warn(missing_debug_implementations, rust_2018_idioms)]
 
 mod document;
