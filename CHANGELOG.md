@@ -4,6 +4,10 @@
 
 No changes.
 
+## 0.2.1 - 2019-05-02
+
+No changes.
+
 ## 0.2.0 - 2019-05-02
 
 * Include girara headers and build FFI bindings using the included headers
