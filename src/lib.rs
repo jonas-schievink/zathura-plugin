@@ -53,6 +53,10 @@ pub use {
     zathura_plugin_sys as sys,
 };
 
+// Used by the macro
+#[doc(hidden)]
+pub use pkg_version::{pkg_version_major, pkg_version_minor, pkg_version_patch};
+
 /// Information needed to configure a Zathura document.
 #[derive(Debug)]
 pub struct DocumentInfo<P: ZathuraPlugin + ?Sized> {
@@ -329,10 +333,9 @@ macro_rules! plugin_entry {
             zathura_plugin_definition_t {
                 name: concat!($name, "\0").as_ptr() as *const _,
                 version: zathura_plugin_version_t {
-                    // TODO: use the Cargo env vars to determine the version
-                    major: 0,
-                    minor: 0,
-                    rev: 0,
+                    major: $crate::pkg_version_major!(),
+                    minor: $crate::pkg_version_minor!(),
+                    rev: $crate::pkg_version_patch!(),
                 },
                 mime_types_size: {
                     // Sum up as many 1s as there are entries in `$mime`. The
