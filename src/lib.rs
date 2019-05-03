@@ -94,8 +94,11 @@ pub trait ZathuraPlugin {
     /// It is not necessary for plugins to implement this. The library will take
     /// care of freeing the `DocumentData` attached to the document, and Zathura
     /// itself will free the actual document.
-    fn document_free(doc: DocumentRef<'_>) -> Result<(), PluginError> {
-        let _ = doc;
+    fn document_free(
+        doc: DocumentRef<'_>,
+        doc_data: &mut Self::DocumentData,
+    ) -> Result<(), PluginError> {
+        let _ = (doc, doc_data);
         Ok(())
     }
 
@@ -115,8 +118,12 @@ pub trait ZathuraPlugin {
     /// This doesn't have to be implemented by a plugin. The library already
     /// takes care of freeing the `PageData` associated with the page, and
     /// Zathura will free the page itself.
-    fn page_free(page: PageRef<'_>) -> Result<(), PluginError> {
-        let _ = page;
+    fn page_free(
+        page: PageRef<'_>,
+        doc_data: &mut Self::DocumentData,
+        page_data: &mut Self::PageData,
+    ) -> Result<(), PluginError> {
+        let _ = (page, doc_data, page_data);
         Ok(())
     }
 
@@ -199,7 +206,8 @@ pub mod wrapper {
     ) -> zathura_error_t {
         wrap(|| {
             let doc = DocumentRef::from_raw(document);
-            let result = P::document_free(doc);
+            let doc_data = &mut *(doc.plugin_data() as *mut P::DocumentData);
+            let result = P::document_free(doc, doc_data);
             let doc = DocumentRef::from_raw(document);
             let plugin_data = doc.plugin_data() as *mut P::DocumentData;
             drop(Box::from_raw(plugin_data));
@@ -240,11 +248,18 @@ pub mod wrapper {
         _data: *mut c_void,
     ) -> zathura_error_t {
         wrap(|| {
+            let result = {
+                let mut p = PageRef::from_raw(page);
+                let doc_data = &mut *(p.document().plugin_data() as *mut P::DocumentData);
+                let page_data = &mut *(p.plugin_data() as *mut P::PageData);
+                P::page_free(p, doc_data, page_data)
+            };
+
+            // Free the `PageData`
             let p = PageRef::from_raw(page);
-            let result = P::page_free(p);
-            let doc = PageRef::from_raw(page);
-            let plugin_data = doc.plugin_data() as *mut P::PageData;
+            let plugin_data = p.plugin_data() as *mut P::PageData;
             drop(Box::from_raw(plugin_data));
+
             result
         })
         .to_zathura()
