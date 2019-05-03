@@ -10,3 +10,15 @@ plugins in Rust.
 
 Please refer to the [changelog](CHANGELOG.md) to see what changed in the last
 releases.
+
+## Usage
+
+Add an entry to your `Cargo.toml`:
+
+```toml
+[dependencies]
+zathura-plugin = "0.3.0"
+```
+
+Check the [API Documentation](https://docs.rs/zathura-plugin/) for how to use the
+crate's functionality.
