@@ -17,7 +17,7 @@ Add an entry to your `Cargo.toml`:
 
 ```toml
 [dependencies]
-zathura-plugin = "0.3.1"
+zathura-plugin = "0.4.0"
 ```
 
 Check the [API Documentation](https://docs.rs/zathura-plugin/) for how to use the

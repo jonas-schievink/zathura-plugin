@@ -4,6 +4,10 @@
 
 No changes.
 
+## 0.4.0 - 2019-05-03
+
+No changes.
+
 ## 0.3.1 - 2019-05-03
 
 * Automatically set the plugin version to the crate version
