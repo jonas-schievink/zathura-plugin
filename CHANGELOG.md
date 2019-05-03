@@ -4,6 +4,10 @@
 
 No changes.
 
+## 0.3.0 - 2019-05-03
+
+No changes.
+
 ## 0.2.1 - 2019-05-02
 
 No changes.
