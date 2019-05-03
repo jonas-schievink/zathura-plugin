@@ -8,6 +8,9 @@ pub enum PluginError {
     NotImplemented,
     InvalidArguments,
     InvalidPassword,
+
+    #[doc(hidden)]
+    __NonExhaustive,
 }
 
 impl PluginError {
