@@ -1,0 +1,3 @@
+# .h files are copies from Zathura/Girara, ignore them in repo stats
+*.h linguist-vendored=true
+
