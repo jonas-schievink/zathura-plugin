@@ -49,22 +49,30 @@ impl PageRef<'_> {
         unsafe { sys::zathura_page_get_index(self.ptr) as usize }
     }
 
+    /// Returns the width of this page in points.
     pub fn width(&self) -> f64 {
         unsafe { sys::zathura_page_get_width(self.ptr) }
     }
 
+    /// Sets the width of this page.
     pub fn set_width(&mut self, width: f64) {
         unsafe { sys::zathura_page_set_width(self.ptr, width) }
     }
 
+    /// Returns the height of this page in points.
     pub fn height(&self) -> f64 {
         unsafe { sys::zathura_page_get_height(self.ptr) }
     }
 
+    /// Sets the height of this page.
     pub fn set_height(&mut self, height: f64) {
         unsafe { sys::zathura_page_set_height(self.ptr, height) }
     }
 
+    /// Returns the plugin-controlled pointer associated with the document.
+    ///
+    /// This is mostly for internal use by this library and is usually unsafe
+    /// to dereference.
     pub fn plugin_data(&self) -> *mut () {
         unsafe { sys::zathura_page_get_data(self.ptr) as *mut () }
     }

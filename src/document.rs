@@ -34,27 +34,25 @@ impl DocumentRef<'_> {
 
     /// Returns the file path as a raw C string.
     ///
-    /// If the document was loaded from a URI, this might return `None` or a
-    /// temporary file path.
-    pub fn path_raw(&self) -> Option<&CStr> {
+    /// If the document was loaded from a URI, this will return a temporary file
+    /// path.
+    pub fn path_raw(&self) -> &CStr {
         unsafe {
             let ptr = sys::zathura_document_get_path(self.ptr);
 
-            if ptr.is_null() {
-                None
-            } else {
-                Some(CStr::from_ptr(ptr))
-            }
+            assert!(!ptr.is_null(), "`zathura_document_get_path` returned NULL");
+
+            CStr::from_ptr(ptr)
         }
     }
 
     /// Returns the file path from which this document was or will be loaded.
     ///
     /// If the document was loaded from a URI and not a local file path, this
-    /// might return `None` or a temporary file path. Returns a `Utf8Error`
-    /// when the raw path does not contain valid UTF-8.
-    pub fn path(&self) -> Option<Result<&str, Utf8Error>> {
-        self.path_raw().map(CStr::to_str)
+    /// will return a temporary file path. Returns a `Utf8Error` when the raw
+    /// path does not contain valid UTF-8.
+    pub fn path_utf8(&self) -> Result<&str, Utf8Error> {
+        self.path_raw().to_str()
     }
 
     /// Returns the URI this document was loaded from.
@@ -65,7 +63,7 @@ impl DocumentRef<'_> {
         unsafe {
             let ptr = sys::zathura_document_get_uri(self.ptr);
 
-            // This isn't documented, but the URI will be NULL is the document
+            // This isn't documented, but the URI will be NULL if the document
             // was loaded from a local path
             if ptr.is_null() {
                 None
@@ -80,35 +78,82 @@ impl DocumentRef<'_> {
     /// Returns `None` if the document was loaded from a local file path and not
     /// a URI. Returns a `Utf8Error` when the raw URI does not contain valid
     /// UTF-8.
-    pub fn uri(&self) -> Option<Result<&str, Utf8Error>> {
+    pub fn uri_utf8(&self) -> Option<Result<&str, Utf8Error>> {
         self.uri_raw().map(CStr::to_str)
     }
 
+    /// Returns the raw basename of the document's path.
+    ///
+    /// If the document was loaded from a URI, this will return the URI's
+    /// basename. Otherwise, this will return the basename of the local file
+    /// path.
     pub fn basename_raw(&self) -> &CStr {
-        unsafe { CStr::from_ptr(sys::zathura_document_get_basename(self.ptr)) }
+        unsafe {
+            let ptr = sys::zathura_document_get_basename(self.ptr);
+            assert!(
+                !ptr.is_null(),
+                "`zathura_document_get_basename` returned NULL"
+            );
+
+            CStr::from_ptr(ptr)
+        }
     }
 
-    pub fn basename(&self) -> Result<&str, Utf8Error> {
+    /// Returns the UTF-8 basename of the document's path.
+    ///
+    /// If the document was loaded from a URI, this will return the URI's
+    /// basename. Otherwise, this will return the basename of the local file
+    /// path.
+    ///
+    /// If the basename is not valid UTF-8, a `Utf8Error` will be returned.
+    pub fn basename_utf8(&self) -> Result<&str, Utf8Error> {
         self.basename_raw().to_str()
     }
 
+    /// Returns the zoom level of the document.
+    ///
+    /// The zoom level is exclusively user-controlled and does not take PPI of
+    /// the screen or target surface into account.
     pub fn zoom(&self) -> f64 {
         unsafe { sys::zathura_document_get_zoom(self.ptr) }
     }
 
+    /// Returns the render scale in device pixels per point.
+    ///
+    /// This takes the zoom level and device PPI into account. Note that even
+    /// with a zoom of `1.0` and on a non-HiDPI screen this will not return
+    /// `1.0`: Zathura assumes that documents use 72 points per inch, while
+    /// non-HiDPI monitors usually have a resolution of 90-100 pixels per inch.
     pub fn scale(&self) -> f64 {
         unsafe { sys::zathura_document_get_scale(self.ptr) }
     }
 
     /// Returns the viewport rotation in degrees.
+    ///
+    /// Zathura only supports rotation by a multiple of 90°. Thus this value is
+    /// limited to the range 0-270 in multiples of 90 (ie. it can be 0, 90,
+    /// 180 or 270).
     pub fn rotation(&self) -> u32 {
         unsafe { sys::zathura_document_get_rotation(self.ptr) }
     }
 
+    /// Returns the viewport's Pixels Per Inch.
+    ///
+    /// This value might be 0.0 if no PPI information is available.
     pub fn viewport_ppi(&self) -> f64 {
         unsafe { sys::zathura_document_get_viewport_ppi(self.ptr) }
     }
 
+    /// Returns the device scaling factors to map from window coordinates to
+    /// pixel coordinates.
+    ///
+    /// Currently, Zathura uses `gtk_widget_get_scale_factor` for this, so this
+    /// will return integer values only, and doesn't distinguish between X and Y
+    /// axis, so both returned values will be the same.
+    ///
+    /// On a "normal" screen, this will return `(1.0, 1.0)`, while on a HiDPI
+    /// screen it will return higher values (eg. `(2.0, 2.0)`). The returned
+    /// values will never be `0.0`.
     pub fn scaling_factors(&self) -> (f64, f64) {
         unsafe {
             let factors = sys::zathura_document_get_device_factors(self.ptr);
@@ -116,6 +161,12 @@ impl DocumentRef<'_> {
         }
     }
 
+    /// Returns the size of a page cell in the document (in device pixels).
+    ///
+    /// Since pages can vary in size, this will return the largest cell size
+    /// needed to fit all pages.
+    ///
+    /// This takes scaling and rotation into account.
     pub fn cell_size(&self) -> (u32, u32) {
         unsafe {
             let (mut height, mut width) = (0, 0);
@@ -144,6 +195,11 @@ impl DocumentRef<'_> {
         }
     }
 
+    /// Returns the currently focused page index.
+    ///
+    /// Multiple pages can be displayed at the same time, in both X and Y
+    /// direction. The returned index usually belongs to the "most-visible"
+    /// page in the viewport.
     pub fn current_page_index(&self) -> u32 {
         unsafe { sys::zathura_document_get_current_page_number(self.ptr) as u32 }
     }
@@ -158,9 +214,13 @@ impl DocumentRef<'_> {
     /// It should only be used when the situation will be corrected immediately
     /// (eg. by allocating the right number of pages).
     pub unsafe fn set_page_count(&mut self, count: u32) {
-        sys::zathura_document_set_number_of_pages(self.ptr, count as u32)
+        sys::zathura_document_set_number_of_pages(self.ptr, count as _)
     }
 
+    /// Returns the plugin-controlled pointer associated with the document.
+    ///
+    /// This is mostly for internal use by this library and is usually unsafe
+    /// to dereference.
     pub fn plugin_data(&self) -> *mut () {
         unsafe { sys::zathura_document_get_data(self.ptr) as *mut () }
     }

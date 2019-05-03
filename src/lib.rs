@@ -385,9 +385,9 @@ impl ZathuraPlugin for TestPlugin {
     type PageData = ();
 
     fn document_open(doc: DocumentRef<'_>) -> Result<DocumentInfo<Self>, PluginError> {
-        println!("open: {:?}", doc.basename());
-        println!("path: {:?}", doc.path());
-        println!("url:  {:?}", doc.uri());
+        println!("open: {:?}", doc.basename_utf8());
+        println!("path: {:?}", doc.path_utf8());
+        println!("url:  {:?}", doc.uri_utf8());
         println!("{} pages", doc.page_count());
         Ok(DocumentInfo {
             page_count: 5,
@@ -410,7 +410,11 @@ impl ZathuraPlugin for TestPlugin {
         })
     }
 
-    fn page_free(page: PageRef<'_>, _doc_data: &mut (), _page_data: &mut ()) -> Result<(), PluginError> {
+    fn page_free(
+        page: PageRef<'_>,
+        _doc_data: &mut (),
+        _page_data: &mut (),
+    ) -> Result<(), PluginError> {
         println!("page free: {:?}", page);
         Ok(())
     }
