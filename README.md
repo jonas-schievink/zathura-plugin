@@ -4,7 +4,7 @@
 [![docs.rs](https://docs.rs/zathura-plugin/badge.svg)](https://docs.rs/zathura-plugin/)
 [![Build Status](https://travis-ci.org/jonas-schievink/zathura-plugin.svg?branch=master)](https://travis-ci.org/jonas-schievink/zathura-plugin)
 
-This crate wraps [Zathura's](https://wiki.archlinux.org/index.php/Zathura)
+This crate wraps [Zathura's](https://pwmt.org/projects/zathura/)
 Plugin API in a memory- and typesafe Rust interface, and allows writing Zathura
 plugins in Rust.
 

@@ -1,8 +1,9 @@
-//! A Rust wrapper around Zathura's plugin API, allowing plugin development in
+//! A Rust wrapper around [Zathura's] plugin API, allowing plugin development in
 //! Rust.
 //!
 //! This library wraps the plugin interface and exposes the [`ZathuraPlugin`]
-//! trait as the primary way to implement a Rust plugin for Zathura.
+//! trait and the [`plugin_entry!`] macro as the primary way to implement a Rust
+//! plugin for Zathura.
 //!
 //! # Examples
 //!
@@ -36,7 +37,9 @@
 //! plugin_entry!("MyPlugin", PluginType, ["text/plain", "application/pdf"]);
 //! ```
 //!
+//! [Zathura's]: https://pwmt.org/projects/zathura/
 //! [`ZathuraPlugin`]: trait.ZathuraPlugin.html
+//! [`plugin_entry!`]: macro.plugin_entry.html
 
 #![doc(html_root_url = "https://docs.rs/zathura-plugin/0.3.0")]
 #![warn(missing_debug_implementations, rust_2018_idioms)]
