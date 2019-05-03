@@ -6,15 +6,16 @@ No changes.
 
 ## 0.3.1 - 2019-05-03
 
-No changes.
+* Automatically set the plugin version to the crate version
+  * To view, type `:version` in Zathura
 
 ## 0.3.0 - 2019-05-03
 
-No changes.
+* Pass `DocumentData` and `PageData` to more plugin functions.
 
 ## 0.2.1 - 2019-05-02
 
-No changes.
+No changes (attempt to trigger docs.rs rebuild).
 
 ## 0.2.0 - 2019-05-02
 
