@@ -18,7 +18,7 @@
 //!         unimplemented!()
 //!     }
 //!
-//!     fn page_init(page: PageRef<'_>) -> Result<PageInfo<Self>, PluginError> {
+//!     fn page_init(page: PageRef<'_>, doc_data: &mut ()) -> Result<PageInfo<Self>, PluginError> {
 //!         unimplemented!()
 //!     }
 //!
@@ -104,7 +104,10 @@ pub trait ZathuraPlugin {
     ///
     /// The plugin has to return a `PageInfo` structure containing page
     /// properties that will be applied by the library.
-    fn page_init(page: PageRef<'_>) -> Result<PageInfo<Self>, PluginError>;
+    fn page_init(
+        page: PageRef<'_>,
+        doc_data: &mut Self::DocumentData,
+    ) -> Result<PageInfo<Self>, PluginError>;
 
     /// Additional hook called before freeing page resources.
     ///
@@ -210,8 +213,13 @@ pub mod wrapper {
         page: *mut zathura_page_t,
     ) -> zathura_error_t {
         wrap(|| {
-            let p = PageRef::from_raw(page);
-            let info = P::page_init(p)?;
+            let mut p = PageRef::from_raw(page);
+
+            // Obtaining the document data is safe, since there is no other way to get access to it
+            // while this function executes.
+            let doc_data = p.document().plugin_data() as *mut P::DocumentData;
+
+            let info = P::page_init(p, &mut *doc_data)?;
             let mut p = PageRef::from_raw(page);
             p.set_width(info.width);
             p.set_height(info.height);
@@ -367,7 +375,7 @@ impl ZathuraPlugin for TestPlugin {
         Ok(())
     }
 
-    fn page_init(page: PageRef<'_>) -> Result<PageInfo<Self>, PluginError> {
+    fn page_init(page: PageRef<'_>, _doc_data: &mut ()) -> Result<PageInfo<Self>, PluginError> {
         println!("page init: {:?}", page);
 
         Ok(PageInfo {
