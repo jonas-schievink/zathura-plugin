@@ -24,7 +24,8 @@
 //!
 //!     fn page_render(
 //!         page: PageRef<'_>,
-//!         _data: &mut Self::PageData,
+//!         doc_data: &mut Self::DocumentData,
+//!         page_data: &mut Self::PageData,
 //!         cairo: &mut cairo::Context,
 //!         printing: bool,
 //!     ) -> Result<(), PluginError> {
@@ -124,13 +125,15 @@ pub trait ZathuraPlugin {
     /// # Parameters
     ///
     /// * **`page`**: Mutable reference to the page to render.
-    /// * **`data`**: Plugin-specific data attached to the page.
+    /// * **`doc_data`**: Plugin-specific data attached to the document.
+    /// * **`page_data`**: Plugin-specific data attached to the page.
     /// * **`cairo`**: The Cairo context to render to.
     /// * **`printing`**: Whether the page is being rendered for printing
     ///   (`true`) or viewing (`false`).
     fn page_render(
         page: PageRef<'_>,
-        data: &mut Self::PageData,
+        doc_data: &mut Self::DocumentData,
+        page_data: &mut Self::PageData,
         cairo: &mut cairo::Context,
         printing: bool,
     ) -> Result<(), PluginError>;
@@ -255,10 +258,11 @@ pub mod wrapper {
         printing: bool,
     ) -> zathura_error_t {
         wrap(|| {
-            let p = PageRef::from_raw(page);
-            let data = &mut *(p.plugin_data() as *mut P::PageData);
+            let mut p = PageRef::from_raw(page);
+            let page_data = &mut *(p.plugin_data() as *mut P::PageData);
+            let doc_data = &mut *(p.document().plugin_data() as *mut P::DocumentData);
             let mut cairo = cairo::Context::from_raw_borrow(cairo as *mut _);
-            P::page_render(p, data, &mut cairo, printing)
+            P::page_render(p, doc_data, page_data, &mut cairo, printing)
         })
         .to_zathura()
     }
@@ -392,7 +396,8 @@ impl ZathuraPlugin for TestPlugin {
 
     fn page_render(
         mut page: PageRef<'_>,
-        _data: &mut Self::PageData,
+        _doc_data: &mut Self::DocumentData,
+        _page_data: &mut Self::PageData,
         cairo: &mut cairo::Context,
         printing: bool,
     ) -> Result<(), PluginError> {
