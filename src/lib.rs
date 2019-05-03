@@ -389,7 +389,7 @@ impl ZathuraPlugin for TestPlugin {
         })
     }
 
-    fn document_free(doc: DocumentRef<'_>) -> Result<(), PluginError> {
+    fn document_free(doc: DocumentRef<'_>, _doc_data: &mut ()) -> Result<(), PluginError> {
         println!("free! {:?}", doc);
         Ok(())
     }
@@ -404,7 +404,7 @@ impl ZathuraPlugin for TestPlugin {
         })
     }
 
-    fn page_free(page: PageRef<'_>) -> Result<(), PluginError> {
+    fn page_free(page: PageRef<'_>, _doc_data: &mut (), _page_data: &mut ()) -> Result<(), PluginError> {
         println!("page free: {:?}", page);
         Ok(())
     }
