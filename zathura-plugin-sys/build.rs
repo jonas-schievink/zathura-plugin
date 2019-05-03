@@ -1,6 +1,6 @@
 use {
     bindgen, pkg_config,
-    std::{env, path::PathBuf, iter},
+    std::{env, iter, path::PathBuf},
 };
 
 fn main() {
