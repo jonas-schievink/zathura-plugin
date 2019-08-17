@@ -6,7 +6,9 @@ No changes.
 
 ## 0.4.0 - 2019-05-03
 
-No changes.
+* Make `PluginError` non-exhaustive
+* Improve the plugin API to be easier to use
+* Improve documentation of a lot of functions
 
 ## 0.3.1 - 2019-05-03
 
