@@ -43,7 +43,7 @@ crate-type = ["cdylib", "rlib"]
 [dependencies]
 zathura-plugin-sys = { path = "zathura-plugin-sys", version = "0.2.0" }
 cairo-sys-rs = "0.9.0"
-cairo-rs = { version = "0.7.0", features = ["v1_14"] }
+cairo-rs = { version = "0.8.0", features = ["v1_14"] }
 pkg-version = "1.0.0"
 
 [dev-dependencies]
