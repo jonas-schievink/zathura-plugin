@@ -14,5 +14,5 @@ links = "zathura"
 build = "build.rs"
 
 [build-dependencies]
-bindgen = "0.52.0"
+bindgen = "0.53.0"
 pkg-config = "0.3.14"
