@@ -2,7 +2,7 @@
 
 [![crates.io](https://img.shields.io/crates/v/zathura-plugin.svg)](https://crates.io/crates/zathura-plugin)
 [![docs.rs](https://docs.rs/zathura-plugin/badge.svg)](https://docs.rs/zathura-plugin/)
-[![Build Status](https://travis-ci.org/jonas-schievink/zathura-plugin.svg?branch=master)](https://travis-ci.org/jonas-schievink/zathura-plugin)
+![CI](https://github.com/jonas-schievink/zathura-plugin/workflows/CI/badge.svg)
 
 This crate wraps [Zathura's](https://pwmt.org/projects/zathura/)
 Plugin API in a memory- and typesafe Rust interface, and allows writing Zathura
